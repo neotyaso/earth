@@ -38,9 +38,10 @@ const skyFrag = /* glsl */`
     // 宇宙フェーズ: 黒へブレンド
     col = mix(col, vec3(0.0, 0.0, 0.01), u_space * 0.96);
 
-    // 大気圏突入グロー (u_space 0.75→0.15 の区間)
-    float reentry = smoothstep(0.75, 0.45, u_space) * smoothstep(0.15, 0.45, u_space);
-    col += vec3(0.95, 0.32, 0.04) * exp(-abs(h + 0.1) * 4.5) * reentry * 2.2;
+    // 大気圏突入グロー: 地平線付近をオレンジ・赤で燃やす
+    float reentry = smoothstep(0.65, 0.35, u_space) * smoothstep(0.02, 0.35, u_space);
+    col += vec3(1.00, 0.38, 0.04) * exp(-abs(h + 0.05) * 3.0) * reentry * 3.8;
+    col += vec3(1.00, 0.80, 0.10) * exp(-abs(h + 0.05) * 8.0) * reentry * 2.0;
 
     gl_FragColor = vec4(col, 1.0);
   }

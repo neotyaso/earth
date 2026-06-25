@@ -3,7 +3,7 @@
 import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { skyState, spaceState } from '../../state'
+import { spaceState } from '../../state'
 
 export function Stars() {
   const pointsRef = useRef<THREE.Points>(null)
@@ -38,9 +38,8 @@ export function Stars() {
   useFrame(() => {
     if (!pointsRef.current) return
     const mat = pointsRef.current.material as THREE.PointsMaterial
-    const spaceOpacity = THREE.MathUtils.smoothstep(spaceState.t, 0.10, 0.65)
-    const nightOpacity = THREE.MathUtils.smoothstep(skyState.progress, 0.5, 0.85) * 0.6
-    mat.opacity = Math.max(spaceOpacity, nightOpacity)
+    // 宇宙フェーズのみ表示。大気圏突入前（spaceState.t 1.0→0.70）でフェードアウト
+    mat.opacity = THREE.MathUtils.smoothstep(spaceState.t, 0.70, 1.0)
   })
 
   return (
@@ -123,8 +122,8 @@ const earthFrag = /* glsl */`
     vec3 col = mix(waterCol, landCol, smoothstep(0.40, 0.54, land));
 
     // 2層の雲（速度と方向が違う）
-    float cloud1 = _fbm(uv * 4.5 + vec2(u_time * 0.012, u_time * 0.006)) * 1.4 - 0.22;
-    float cloud2 = _fbm(uv * 7.0 - vec2(u_time * 0.008, u_time * 0.014)) * 1.2 - 0.30;
+    float cloud1 = _fbm(uv * 4.5 + vec2(u_time * 0.038, u_time * 0.018)) * 1.4 - 0.22;
+    float cloud2 = _fbm(uv * 7.0 - vec2(u_time * 0.025, u_time * 0.042)) * 1.2 - 0.30;
     float cloud  = max(cloud1, cloud2 * 0.7);
     col = mix(col, vec3(0.96, 0.97, 1.00), smoothstep(0.50, 0.72, cloud) * 0.88);
 
@@ -153,7 +152,7 @@ const atmFrag = /* glsl */`
     vec3 vd = normalize(cameraPosition - v_pos);
     float rim = 1.0 - abs(dot(normalize(v_norm), vd));
     rim = pow(rim, 1.6);
-    gl_FragColor = vec4(vec3(0.28, 0.55, 1.0), rim * 0.72);
+    gl_FragColor = vec4(vec3(0.88, 0.91, 0.95), rim * 0.45);
   }
 `
 
@@ -163,6 +162,7 @@ export function Earth() {
     vertexShader: earthVert,
     fragmentShader: earthFrag,
     uniforms: { u_time: { value: 0 } },
+    side: THREE.DoubleSide,
   }), [])
   const atmMat = useMemo(() => new THREE.ShaderMaterial({
     vertexShader: atmVert,

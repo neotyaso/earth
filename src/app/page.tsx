@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { Environment } from '@react-three/drei'
 import { EffectComposer, Bloom, Noise, Vignette, DepthOfField, ChromaticAberration } from '@react-three/postprocessing'
@@ -11,22 +11,37 @@ import * as THREE from 'three'
 import { scrollState, skyState, spaceState, skyFromScroll } from './state'
 import { DynamicSky }       from './components/scene/Sky'
 import { DynamicAtmosphere, DynamicLights } from './components/scene/Atmosphere'
-import { Stars, Earth }                      from './components/scene/Space'
+import { Stars, Earth }     from './components/scene/Space'
 import { Ocean }            from './components/scene/Ocean'
 import { CameraRig }        from './components/scene/CameraRig'
 import { OceanAudio }       from './components/scene/OceanAudio'
-import { CustomCursor }     from './components/ui/CustomCursor'
-import { ScrollIndicator }  from './components/ui/ScrollIndicator'
-import { HeroSection }      from './components/sections/HeroSection'
-import { AboutSection }     from './components/sections/AboutSection'
-import { WorkSection }      from './components/sections/WorkSection'
-import { ContactSection }   from './components/sections/ContactSection'
 
 gsap.registerPlugin(ScrollTrigger)
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false)
   const handleLoadComplete = useCallback(() => setLoaded(true), [])
+  const burnRef = useRef<HTMLDivElement>(null)
+
+  // 大気圏突入燃焼オーバーレイ
+  useEffect(() => {
+    let raf: number
+    function update() {
+      if (burnRef.current) {
+        const p = scrollState.progress
+        // scroll 0.38→0.65 でベル曲線 (ピーク 0.515)
+        let intensity = 0
+        if (p >= 0.38 && p <= 0.65) {
+          const t = (p - 0.38) / 0.27
+          intensity = Math.sin(t * Math.PI)
+        }
+        burnRef.current.style.opacity = String(intensity)
+      }
+      raf = requestAnimationFrame(update)
+    }
+    raf = requestAnimationFrame(update)
+    return () => cancelAnimationFrame(raf)
+  }, [])
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -42,8 +57,8 @@ export default function Home() {
       end: 'bottom bottom',
       onUpdate: (self) => {
         scrollState.progress = self.progress
-        spaceState.t         = Math.max(0, 1 - self.progress / 0.22)
-        skyState.progress    = skyFromScroll(self.progress)
+        spaceState.t = Math.max(0, Math.min(1, (0.55 - self.progress) / 0.13))
+        skyState.progress = skyFromScroll(self.progress)
       },
     })
     ScrollTrigger.refresh()
@@ -53,8 +68,6 @@ export default function Home() {
   return (
     <main>
       <OceanAudio />
-      <CustomCursor />
-      <ScrollIndicator />
 
       <div style={{ opacity: loaded ? 1 : 0, transition: 'opacity 1.2s ease' }}>
         <div style={{ position: 'fixed', inset: 0, zIndex: 0 }}>
@@ -82,19 +95,16 @@ export default function Home() {
           </Canvas>
         </div>
 
-        <div style={{
-          position: 'fixed', bottom: 0, left: 0, right: 0, height: '50vh',
-          background: 'linear-gradient(to top, rgba(4,8,20,0.55) 0%, transparent 100%)',
-          zIndex: 1, pointerEvents: 'none',
+        {/* 大気圏燃焼オーバーレイ */}
+        <div ref={burnRef} style={{
+          position: 'fixed', inset: 0, zIndex: 3,
+          pointerEvents: 'none', opacity: 0,
+          mixBlendMode: 'screen',
+          background: 'radial-gradient(ellipse at 50% 50%, rgba(255,140,20,0.55) 0%, rgba(220,60,0,0.40) 35%, rgba(160,20,0,0.20) 65%, transparent 85%)',
+          boxShadow: 'inset 0 0 180px rgba(255,90,0,0.50), inset 0 0 60px rgba(255,200,0,0.25)',
         }} />
 
-        {/* スクロール 800vh */}
-        <div id="scroll-container" style={{ position: 'relative', zIndex: 2, height: '800vh' }}>
-          <div style={{ height: '200vh' }}><HeroSection loaded={loaded} /></div>
-          <div style={{ height: '150vh' }}><AboutSection loaded={loaded} /></div>
-          <div style={{ height: '200vh' }}><WorkSection loaded={loaded} /></div>
-          <div style={{ height: '250vh' }}><ContactSection loaded={loaded} /></div>
-        </div>
+        <div id="scroll-container" style={{ position: 'relative', zIndex: 2, height: '800vh' }} />
       </div>
     </main>
   )
