@@ -2,6 +2,10 @@
 
 import { useEffect } from 'react'
 import Lenis from 'lenis'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 export function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -10,15 +14,16 @@ export function Providers({ children }: { children: React.ReactNode }) {
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     })
 
-    let rafId: number
-    function raf(time: number) {
-      lenis.raf(time)
-      rafId = requestAnimationFrame(raf)
-    }
-    rafId = requestAnimationFrame(raf)
+    // LenisのスクロールイベントをScrollTriggerに流す
+    lenis.on('scroll', ScrollTrigger.update)
+
+    // GSAPのtickerでLenisを駆動（独立RAFを持たない）
+    const onTick = (time: number) => lenis.raf(time * 1000)
+    gsap.ticker.add(onTick)
+    gsap.ticker.lagSmoothing(0)
 
     return () => {
-      cancelAnimationFrame(rafId)
+      gsap.ticker.remove(onTick)
       lenis.destroy()
     }
   }, [])
