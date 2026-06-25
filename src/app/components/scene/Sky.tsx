@@ -21,8 +21,8 @@ const skyFrag = /* glsl */`
   void main() {
     float h = normalize(vWorldPos).y;
     float t = clamp(h * 0.5 + 0.5, 0.0, 1.0);
-    vec3 dayTop   = vec3(0.28, 0.58, 0.92);
-    vec3 dayBot   = vec3(0.72, 0.88, 1.0);
+    vec3 dayTop   = vec3(0.35, 0.65, 0.98);
+    vec3 dayBot   = vec3(0.82, 0.94, 1.0);
     vec3 duskTop  = vec3(0.08, 0.12, 0.38);
     vec3 duskBot  = vec3(0.90, 0.30, 0.06);
     vec3 nightTop = vec3(0.02, 0.04, 0.13);

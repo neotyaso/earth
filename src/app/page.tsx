@@ -11,10 +11,9 @@ import * as THREE from 'three'
 import { scrollState, skyState, spaceState, skyFromScroll } from './state'
 import { DynamicSky }       from './components/scene/Sky'
 import { DynamicAtmosphere, DynamicLights } from './components/scene/Atmosphere'
-import { Stars, Earth }     from './components/scene/Space'
+import { Stars, Earth, WireArms } from './components/scene/Space'
 import { Ocean }            from './components/scene/Ocean'
 import { CameraRig }        from './components/scene/CameraRig'
-import { OceanAudio }       from './components/scene/OceanAudio'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -67,30 +66,29 @@ export default function Home() {
 
   return (
     <main>
-      <OceanAudio />
-
       <div style={{ opacity: loaded ? 1 : 0, transition: 'opacity 1.2s ease' }}>
         <div style={{ position: 'fixed', inset: 0, zIndex: 0 }}>
           <Canvas
             dpr={[1, 1.5]}
             camera={{ position: [0, 200, 5], fov: 60 }}
-            gl={{ toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.15 }}
+            gl={{ toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.0 }}
             onCreated={() => handleLoadComplete()}
           >
             <DynamicAtmosphere />
             <DynamicSky />
             <Stars />
+            <WireArms />
             <Earth />
             <DynamicLights />
             <CameraRig />
-            <Environment preset="dawn" background={false} />
+            <Environment preset="night" background={false} />
             <Ocean />
             <EffectComposer>
               <ChromaticAberration offset={new THREE.Vector2(0.0014, 0.0014)} />
               <DepthOfField focusDistance={0.009} focalLength={0.018} bokehScale={0.3} />
-              <Bloom intensity={0.55} luminanceThreshold={0.40} luminanceSmoothing={0.9} />
+              <Bloom intensity={0.25} luminanceThreshold={0.65} luminanceSmoothing={0.85} />
               <Noise opacity={0.032} />
-              <Vignette eskil={false} offset={0.16} darkness={0.65} />
+              <Vignette eskil={false} offset={0.16} darkness={0.40} />
             </EffectComposer>
           </Canvas>
         </div>

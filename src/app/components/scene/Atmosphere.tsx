@@ -39,15 +39,15 @@ export function DynamicLights() {
 
   useFrame(() => {
     const p = skyState.progress
-    if (sunRef.current)  sunRef.current.intensity  = THREE.MathUtils.lerp(1.4, 0.0, p)
-    if (moonRef.current) moonRef.current.intensity = THREE.MathUtils.lerp(0.0, 0.5, p)
-    if (ambRef.current)  ambRef.current.intensity  = THREE.MathUtils.lerp(0.65, 0.08, p)
+    if (sunRef.current)  sunRef.current.intensity  = THREE.MathUtils.lerp(2.2, 0.0, p)
+    if (moonRef.current) moonRef.current.intensity = THREE.MathUtils.lerp(0.0, 0.6, p)
+    if (ambRef.current)  ambRef.current.intensity  = THREE.MathUtils.lerp(1.0, 0.12, p)
   })
 
   return (
     <>
-      <ambientLight ref={ambRef} intensity={0.65} />
-      <directionalLight ref={sunRef}  position={[8, 10, 6]}  intensity={1.4} color="#fff6e0" />
+      <ambientLight ref={ambRef} intensity={1.0} />
+      <directionalLight ref={sunRef}  position={[8, 10, 6]}  intensity={2.2} color="#fff6e0" />
       <directionalLight ref={moonRef} position={[-5, 8, -3]} intensity={0}   color="#b0c8e8" />
     </>
   )

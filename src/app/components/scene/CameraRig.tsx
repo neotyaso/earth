@@ -5,7 +5,7 @@ import { useThree, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { scrollState } from '../../state'
 
-const CAM_START  = new THREE.Vector3(0,  200,    5)
+const CAM_START  = new THREE.Vector3(0,  180,    5)
 const CAM_CLOUD  = new THREE.Vector3(0, -113,  -286)
 const CAM_OCEAN  = new THREE.Vector3(0,  4.8,  10.5)
 const EARTH_CTR  = new THREE.Vector3(0, -150,  -320)
