@@ -163,85 +163,122 @@ export function WireArms() {
     const L_ELB  = new THREE.Vector3(-240,  -20, -190)
     const L_WRI  = new THREE.Vector3(-145,  -20,  -55)
     const L_PALM = new THREE.Vector3(-122,  -15,   10)
-    // 各指: 第一関節(1) → 第二関節(2) → 先端(3) の3関節
-    // 2はちょうど1と3の中間点 → 形は変わらずカーブが滑らかに
+    // 各指: 第一関節(1) → 第二関節(2) → 第三関節(3) → 第四関節(4) → 先端(5) の5関節
     const L_T1   = new THREE.Vector3( -93,  -55,  -12) // 親指・第一関節
     const L_T2   = new THREE.Vector3( -93,  -70,   -2) // 親指・第二関節
-    const L_T3   = new THREE.Vector3( -67,  -97,   10) // 親指・先端
+    const L_T3   = new THREE.Vector3( -67,  -97,   10) // 親指・第三関節
+    const L_T4   = new THREE.Vector3( -51, -113,   17) // 親指・第四関節
+    const L_T5   = new THREE.Vector3( -39, -125,   22) // 親指・先端
     const L_I1   = new THREE.Vector3(-107,   55,   28) // 人差し指・第一関節
     const L_I2   = new THREE.Vector3(-109,   77,   57) // 人差し指・第二関節
-    const L_I3   = new THREE.Vector3( -85,  100,   87) // 人差し指・先端
+    const L_I3   = new THREE.Vector3( -85,  100,   87) // 人差し指・第三関節
+    const L_I4   = new THREE.Vector3( -71,  114,  105) // 人差し指・第四関節
+    const L_I5   = new THREE.Vector3( -60,  124,  119) // 人差し指・先端
     const L_M1   = new THREE.Vector3(-107,   38,   45) // 中指・第一関節
     const L_M2   = new THREE.Vector3(-105,   62,   77) // 中指・第二関節
-    const L_M3   = new THREE.Vector3( -77,   86,  109) // 中指・先端（最長）
+    const L_M3   = new THREE.Vector3( -77,   86,  109) // 中指・第三関節
+    const L_M4   = new THREE.Vector3( -60,  100,  128) // 中指・第四関節
+    const L_M5   = new THREE.Vector3( -47,  111,  142) // 中指・先端（最長）
     const L_R1   = new THREE.Vector3(-107,   18,   58) // 薬指・第一関節
     const L_R2   = new THREE.Vector3(-109,   40,   87) // 薬指・第二関節
-    const L_R3   = new THREE.Vector3( -85,   62,  116) // 薬指・先端
-    const L_P1   = new THREE.Vector3(-107,   -2,   68) // 小指・第一関節
-    const L_P2   = new THREE.Vector3(-111,   16,   92) // 小指・第二関節
-    const L_P3   = new THREE.Vector3( -89,   34,  116) // 小指・先端
+    const L_R3   = new THREE.Vector3( -85,   62,  116) // 薬指・第三関節
+    const L_R4   = new THREE.Vector3( -71,   75,  133) // 薬指・第四関節
+    const L_R5   = new THREE.Vector3( -60,   85,  146) // 薬指・先端
+    const L_P1   = new THREE.Vector3(-120,   -2,  58) // 小指・第一関節
+    const L_P2   = new THREE.Vector3(-101,   13,  81) // 小指・第二関節
+    const L_P3   = new THREE.Vector3( -50,   45,  105) // 小指・第三関節
+    const L_P4   = new THREE.Vector3( -30,   59,  110) // 小指・第四関節
+    const L_P5   = new THREE.Vector3( -10,   64,  120) // 小指・先端
 
     // ── 右腕（左の鏡像） ──
     const R_ELB  = new THREE.Vector3( 240,  -20, -190)
     const R_WRI  = new THREE.Vector3( 145,  -20,  -55)
     const R_PALM = new THREE.Vector3( 122,  -15,   10)
-    // 各指: 第一関節(1) → 第二関節(2) → 先端(3) の3関節
-    // 2はちょうど1と3の中間点 → 形は変わらずカーブが滑らかに
     const R_T1   = new THREE.Vector3(  93,  -55,  -12)
     const R_T2   = new THREE.Vector3(  93,  -70,   -2)
     const R_T3   = new THREE.Vector3(  67,  -97,   10)
+    const R_T4   = new THREE.Vector3(  51, -113,   17)
+    const R_T5   = new THREE.Vector3(  39, -125,   22)
     const R_I1   = new THREE.Vector3( 107,   55,   28)
     const R_I2   = new THREE.Vector3( 109,   77,   57)
     const R_I3   = new THREE.Vector3(  85,  100,   87)
+    const R_I4   = new THREE.Vector3(  71,  114,  105)
+    const R_I5   = new THREE.Vector3(  60,  124,  119)
     const R_M1   = new THREE.Vector3( 107,   38,   45)
     const R_M2   = new THREE.Vector3( 105,   62,   77)
     const R_M3   = new THREE.Vector3(  77,   86,  109)
+    const R_M4   = new THREE.Vector3(  60,  100,  128)
+    const R_M5   = new THREE.Vector3(  47,  111,  142)
     const R_R1   = new THREE.Vector3( 107,   18,   58)
     const R_R2   = new THREE.Vector3( 109,   40,   87)
     const R_R3   = new THREE.Vector3(  85,   62,  116)
+    const R_R4   = new THREE.Vector3(  71,   75,  133)
+    const R_R5   = new THREE.Vector3(  60,   85,  146)
     const R_P1   = new THREE.Vector3( 107,   -2,   68)
     const R_P2   = new THREE.Vector3( 111,   16,   92)
     const R_P3   = new THREE.Vector3(  89,   34,  116)
+    const R_P4   = new THREE.Vector3(  30,   69,  178)
+    const R_P5   = new THREE.Vector3(  15,   80,  195)
 
     const bones = [
       // 左腕
       { a: L_ELB,  b: L_WRI,  count: 100, spread: 50 },
       { a: L_WRI,  b: L_PALM, count: 96, spread: 30 },
-      // 左5本指（3関節）
+      // 左5本指（5関節）
       { a: L_PALM, b: L_T1,   count: 22, spread: 14 },
       { a: L_T1,   b: L_T2,   count: 16, spread:  9 },
       { a: L_T2,   b: L_T3,   count: 14, spread:  7 },
+      { a: L_T3,   b: L_T4,   count: 11, spread:  5 },
+      { a: L_T4,   b: L_T5,   count:  9, spread:  4 },
       { a: L_PALM, b: L_I1,   count: 22, spread: 13 },
-      { a: L_I1,   b: L_I2,   count: 26, spread:  12 },
+      { a: L_I1,   b: L_I2,   count: 26, spread: 12 },
       { a: L_I2,   b: L_I3,   count: 23, spread:  9 },
+      { a: L_I3,   b: L_I4,   count: 13, spread:  6 },
+      { a: L_I4,   b: L_I5,   count: 10, spread:  4 },
       { a: L_PALM, b: L_M1,   count: 22, spread: 13 },
       { a: L_M1,   b: L_M2,   count: 16, spread:  9 },
       { a: L_M2,   b: L_M3,   count: 14, spread:  7 },
+      { a: L_M3,   b: L_M4,   count: 12, spread:  5 },
+      { a: L_M4,   b: L_M5,   count:  9, spread:  4 },
       { a: L_PALM, b: L_R1,   count: 20, spread: 12 },
       { a: L_R1,   b: L_R2,   count: 15, spread:  8 },
       { a: L_R2,   b: L_R3,   count: 13, spread:  6 },
+      { a: L_R3,   b: L_R4,   count: 11, spread:  5 },
+      { a: L_R4,   b: L_R5,   count:  8, spread:  3 },
       { a: L_PALM, b: L_P1,   count: 18, spread: 11 },
       { a: L_P1,   b: L_P2,   count: 13, spread:  7 },
       { a: L_P2,   b: L_P3,   count: 11, spread:  5 },
+      { a: L_P3,   b: L_P4,   count:  9, spread:  4 },
+      { a: L_P4,   b: L_P5,   count:  7, spread:  3 },
       // 右腕
       { a: R_ELB,  b: R_WRI,  count: 100, spread: 50 },
       { a: R_WRI,  b: R_PALM, count: 96, spread: 30 },
-      // 右5本指（3関節）
+      // 右5本指（5関節）
       { a: R_PALM, b: R_T1,   count: 22, spread: 14 },
       { a: R_T1,   b: R_T2,   count: 16, spread:  9 },
       { a: R_T2,   b: R_T3,   count: 14, spread:  7 },
+      { a: R_T3,   b: R_T4,   count: 11, spread:  5 },
+      { a: R_T4,   b: R_T5,   count:  9, spread:  4 },
       { a: R_PALM, b: R_I1,   count: 22, spread: 13 },
       { a: R_I1,   b: R_I2,   count: 16, spread:  9 },
       { a: R_I2,   b: R_I3,   count: 14, spread:  7 },
+      { a: R_I3,   b: R_I4,   count: 13, spread:  6 },
+      { a: R_I4,   b: R_I5,   count: 10, spread:  4 },
       { a: R_PALM, b: R_M1,   count: 22, spread: 13 },
       { a: R_M1,   b: R_M2,   count: 16, spread:  9 },
       { a: R_M2,   b: R_M3,   count: 14, spread:  7 },
+      { a: R_M3,   b: R_M4,   count: 12, spread:  5 },
+      { a: R_M4,   b: R_M5,   count:  9, spread:  4 },
       { a: R_PALM, b: R_R1,   count: 20, spread: 12 },
       { a: R_R1,   b: R_R2,   count: 15, spread:  8 },
       { a: R_R2,   b: R_R3,   count: 13, spread:  6 },
+      { a: R_R3,   b: R_R4,   count: 11, spread:  5 },
+      { a: R_R4,   b: R_R5,   count:  8, spread:  3 },
       { a: R_PALM, b: R_P1,   count: 18, spread: 11 },
       { a: R_P1,   b: R_P2,   count: 13, spread:  7 },
       { a: R_P2,   b: R_P3,   count: 11, spread:  5 },
+      { a: R_P3,   b: R_P4,   count:  9, spread:  4 },
+      { a: R_P4,   b: R_P5,   count:  7, spread:  3 },
     ]
 
     const positions: number[] = []
@@ -277,10 +314,10 @@ export function Earth() {
     side: THREE.FrontSide,
   }), [])
 
-  const [dayMap, specMap, nightMap] = useTexture([
+const [dayMap, specMap, nightMap] = useTexture([
     '/textures/earth/earth_day.jpg',
     '/textures/earth/earth_specular.jpg',
-    '/textures/earth/earth_night.png',
+    '/textures/earth/earth_night.jpg',
   ])
 
   useFrame((state) => {
